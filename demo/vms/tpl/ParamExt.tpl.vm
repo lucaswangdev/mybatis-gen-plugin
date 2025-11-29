@@ -1,0 +1,11 @@
+## 此时，model是tpl1.jm.vm中传入的cfg
+
+#foreach($table in $model.db.tables)
+
+    #set($paramExtModel = {"table" : $table, "package":$model.package, "basePkg":$model.basePkg})
+    #set($classNameParamExt = "${table.className}ParamExt")
+    #set($paramExtModel.className = $classNameParamExt)
+    ##生成 xxxxParamExt.java，如果目标文件存在，替换
+    $processor.generate("${model.tplPath}/ParamExtBase.vm", "${model.targetPath}/${table.className}ParamExt.java", true, $paramExtModel)
+
+#end

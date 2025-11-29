@@ -1,0 +1,11 @@
+## Generate common base classes
+#set($commonModel = {"package": "${model.basePkg}.common"})
+
+## Generate BaseDO.java
+$processor.generate("${model.tplPath}/BaseDO.vm", "${model.targetPath}/BaseDO.java", true, $commonModel)
+
+## Generate BaseParam.java
+$processor.generate("${model.tplPath}/BaseParam.vm", "${model.targetPath}/BaseParam.java", true, $commonModel)
+
+## Generate BaseMapper.java
+$processor.generate("${model.tplPath}/BaseMapper.vm", "${model.targetPath}/BaseMapper.java", true, $commonModel)

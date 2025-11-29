@@ -1,0 +1,41 @@
+##tpl1.jm.vm
+
+## model是Database对象
+#set($cfg = {
+    "basePkg" : "com.lucaswangdev",
+    "tplPath" : "./tpl",
+    "baseTargetPath" : "../src/main/java/com/lucaswangdev",
+    "db":${model},
+    "mapperXMLPkg":"com.lucaswangdev"
+})
+
+## Generate common base classes
+#set($cfg.targetPath = "${cfg.baseTargetPath}/common")
+$processor.process("${cfg.tplPath}/CommonBase.tpl.vm", $cfg)
+
+## Generate model classes (DO)
+#set($cfg.package = "${cfg.basePkg}.model")
+#set($cfg.targetPath = "${cfg.baseTargetPath}/model")
+$processor.process("${cfg.tplPath}/Model.tpl.vm", $cfg)
+
+## Generate param classes
+#set($cfg.package = "${cfg.basePkg}.params")
+#set($cfg.targetPath = "${cfg.baseTargetPath}/params")
+$processor.process("${cfg.tplPath}/Param.tpl.vm", $cfg)
+
+## Generate param ext classes
+#set($cfg.package = "${cfg.basePkg}.params.ext")
+#set($cfg.targetPath = "${cfg.baseTargetPath}/params/ext")
+$processor.process("${cfg.tplPath}/ParamExt.tpl.vm", $cfg)
+
+## Generate mapper interfaces
+#set($cfg.entityPkg = "${cfg.basePkg}.model")
+#set($cfg.paramPkg = "${cfg.basePkg}.params")
+#set($cfg.paramExtPkg = "${cfg.basePkg}.params.ext")
+#set($cfg.repoPkg = "${cfg.basePkg}.mapper")
+#set($cfg.targetPath = "${cfg.baseTargetPath}/mapper")
+$processor.process("${cfg.tplPath}/Repository.tpl.vm", $cfg)
+
+## Generate mapper XML files
+#set($cfg.targetPath = "../src/main/resources/${cfg.mapperXMLPkg}/mapper")
+$processor.process("${cfg.tplPath}/Mapper.tpl.vm", $cfg)

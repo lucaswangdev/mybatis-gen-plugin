@@ -1,0 +1,53 @@
+MyBatis Generator插件使用总结
+=====================
+
+插件功能
+------
+1. 实现了Maven插件，可通过`mvn mybatis-gen:generate`命令使用
+2. 支持从数据库读取元数据并生成代码
+3. 生成完整的Entity、Mapper和XML映射文件
+4. 保持了原有的继承结构（Base类 + 可扩展类）
+
+本地使用方法
+----------
+1. 克隆或下载项目
+2. 在项目根目录运行`mvn clean install`将插件安装到本地Maven仓库
+3. 在自己的项目中添加插件配置：
+   ```xml
+   <build>
+     <plugins>
+       <plugin>
+         <groupId>com.lucaswangdev</groupId>
+         <artifactId>mybatis-gen-plugin</artifactId>
+         <version>1.0.0</version>
+         <configuration>
+           <configFile>generator.properties</configFile>
+         </configuration>
+       </plugin>
+     </plugins>
+   </build>
+   ```
+4. 在项目根目录创建`generator.properties`配置文件
+5. 创建模板文件目录结构
+6. 运行`mvn mybatis-gen:generate`生成代码
+
+使用验证
+------
+1. 插件已成功安装到本地Maven仓库
+2. 在`example-project`中成功测试了插件功能
+3. 生成了所有预期的文件：
+   - Entity类（UserBase.java, User.java）
+   - Mapper接口（UserMapperBase.java, UserMapper.java）
+   - XML映射文件（UserMapperBase.xml, UserMapper.xml）
+
+当前状态
+------
+1. 插件功能完整，可正常使用
+2. 尚未发布到Maven中央仓库，只能在本地使用
+3. 提供了完整的使用示例和文档
+
+注意事项
+------
+1. 需要配置正确的数据库连接信息
+2. 模板文件必须按照指定的目录结构放置
+3. 生成的文件会覆盖已存在的同名文件

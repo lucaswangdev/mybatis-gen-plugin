@@ -1,0 +1,11 @@
+## 此时，model是tpl1.jm.vm中传入的cfg
+
+#foreach($table in $model.db.tables)
+
+    #set($modelModel = {"table" : $table, "package":$model.package, "basePkg":$model.basePkg})
+    #set($classNameDO = "${table.className}DO")
+    #set($modelModel.className = $classNameDO)
+    ##生成xxxxBase.java，如果目标文件存在，替换
+    $processor.generate("${model.tplPath}/ModelBase.vm", "${model.targetPath}/${table.className}DO.java", true, $modelModel)
+
+#end

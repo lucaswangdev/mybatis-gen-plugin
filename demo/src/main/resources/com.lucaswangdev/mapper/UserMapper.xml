@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lucaswangdev.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.lucaswangdev.model.UserDO">
+        <result column="id" property="id" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_modified" property="gmtModified" />
+        <result column="user_name" property="userName" />
+        <result column="sex" property="sex" />
+        <result column="address" property="address" />
+    </resultMap>
+
+    <sql id="Table_Name">
+        user
+    </sql>
+
+    <sql id="Base_Column_List">
+     `id`, `gmt_create`, `gmt_modified`, `user_name`, `sex`, `address`    </sql>
+
+    <sql id="Base_Value_List">
+      #{id}, #{gmtCreate}, #{gmtModified}, #{userName}, #{sex}, #{address}    </sql>
+
+    <sql id="getSingleByIdSql">
+        <where>
+            and `id` = #{id}
+        </where>
+    </sql>
+
+    <sql id="Base_Set_List">
+        <trim suffixOverrides=",">
+            <include refid="update_set_sql" />
+        </trim>
+    </sql>
+
+    <sql id="update_set_sql">
+        <if test="gmtModified != null">
+            `gmt_modified` = #{gmtModified},
+        </if>
+        <if test="userName != null">
+            `user_name` = #{userName},
+        </if>
+        <if test="sex != null">
+            `sex` = #{sex},
+        </if>
+        <if test="address != null">
+            `address` = #{address},
+        </if>
+    </sql>
+
+    <sql id="orderBySql">
+        <if test="orderByList != null and orderByList.size > 0">
+            order by
+            <foreach collection="orderByList" item="orderByItem" separator=",">
+                ${orderByItem}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="limitSql">
+        <if test="offSet != null and size != null">
+            limit #{offSet}, #{size}
+        </if>
+        <if test="offSet == null and size != null">
+            limit #{size}
+        </if>
+    </sql>
+
+    <sql id="entityConditionsSql">
+        <if test="id != null">
+            and `id` = #{id},
+        </if>
+        <if test="gmtCreate != null">
+            and `gmt_create` = #{gmtCreate},
+        </if>
+        <if test="gmtModified != null">
+            and `gmt_modified` = #{gmtModified},
+        </if>
+        <if test="userName != null">
+            and `user_name` = #{userName},
+        </if>
+        <if test="sex != null">
+            and `sex` = #{sex},
+        </if>
+        <if test="address != null">
+            and `address` = #{address},
+        </if>
+    </sql>
+
+    <sql id="entityExtConditionsSql">
+        <if test="idList != null and idList.size > 0">
+            and `id` in
+            <foreach collection="idList" item="idItem" open="(" separator="," close=")">
+                #{idItem}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="queryByQueryParamSql">
+        <where>
+            <include refid="entityConditionsSql" />
+            <include refid="entityExtConditionsSql" />
+        </where>
+    </sql>
+
+    <sql id="queryByEntitySql">
+        <where>
+            <include refid="entityConditionsSql" />
+        </where>
+    </sql>
+
+    <!--新增记录-->
+    <insert id="insert" parameterType="com.lucaswangdev.model.UserDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="Table_Name"/>
+        (<include refid="Base_Column_List" />)
+        values ( <include refid="Base_Value_List" />)
+    </insert>
+
+    <!--批量新增记录-->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO <include refid="Table_Name"/>
+        (<include refid="Base_Column_List" />)
+        values
+        <foreach collection="list" item="el" open="(" separator="), (" close=")">
+            #{el.id}, #{el.gmtCreate}, #{el.gmtModified}, #{el.userName}, #{el.sex}, #{el.address}        </foreach>
+    </insert>
+
+    <!--根据条件更新记录-->
+    <update id="update" parameterType="com.lucaswangdev.model.UserDO">
+        update <include refid="Table_Name" />
+        set <include refid="Base_Set_List" />
+        <include refid="getSingleByIdSql" />
+    </update>
+
+    <!--保存记录，如果存在，则更新记录-->
+    <update id="save" parameterType="com.lucaswangdev.model.UserDO">
+        INSERT INTO <include refid="Table_Name"/>
+        (<include refid="Base_Column_List" />)
+        values ( <include refid="Base_Value_List" />)
+        on duplicate key update <include refid="Base_Set_List" />
+    </update>
+
+    <!--删除记录-->
+    <delete id="deleteById">
+        DELETE from <include refid="Table_Name"/>
+        where `id` = #{id}
+    </delete>
+
+    <!-- 根据主键查询单条记录-->
+    <select id="getSingleById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <include refid="getSingleByIdSql" />
+        limit 1
+    </select>
+
+    <!-- 根据主键查询单条记录-->
+    <select id="getById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <include refid="getSingleByIdSql" />
+        limit 1
+    </select>
+
+    <!-- 根据主键查询单条记录-->
+    <select id="queryListByParam" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <include refid="queryByQueryParamSql" />
+        <include refid="orderBySql" />
+        <include refid="limitSql" />
+    </select>
+
+    <!-- 根据主键查询单条记录-->
+    <select id="queryCountByParam" resultType="java.lang.Long">
+        select count(*)
+        from <include refid="Table_Name"/>
+        <include refid="queryByQueryParamSql" />
+    </select>
+
+    <sql id="queryByQueryParamExtSql">
+        <where>
+            <include refid="entityConditionsSql" />
+            <include refid="entityExtConditionsSql" />
+            <if test="nameLike != null and nameLike != '' ">
+                and name like concat('%', #{nameLike}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <!--根据查询条件查询记录，扩展-->
+    <select id="queryListByParamExt" resultType="com.lucaswangdev.model.UserDO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <include refid="queryByQueryParamExtSql" />
+        <include refid="orderBySql" />
+        <include refid="limitSql" />
+    </select>
+
+    <!--根据查询条件查询数量，扩展-->
+    <select id="queryCountByParamExt" resultType="java.lang.Long">
+        select count(*)
+        from <include refid="Table_Name"/>
+        <include refid="queryByQueryParamExtSql" />
+    </select>
+
+    <!-- DO_NOT_MODIFY_ABOVE -->
+    <select id="queryCountByParamExt3" resultType="java.lang.Long">
+        select count(*)
+        from <include refid="Table_Name"/>
+        <include refid="queryByQueryParamExtSql" />
+    </select>
+</mapper>

@@ -1,0 +1,21 @@
+package $model.package;
+
+import ${model.basePkg}.params.${model.table.className}Param;
+import org.apache.ibatis.type.Alias;
+
+@Alias("${model.table.className}ParamExt")
+public class ${model.className} extends ${model.table.className}Param {
+
+    private static final long serialVersionUID = 1L;
+
+    private String extendField;
+
+
+    public String getExtendField() {
+        return extendField;
+    }
+
+    public void setExtendField(String extendField) {
+        this.extendField = extendField;
+    }
+}

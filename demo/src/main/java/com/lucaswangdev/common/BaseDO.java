@@ -1,0 +1,49 @@
+package com.lucaswangdev.common;
+
+import java.util.Date;
+
+/**
+ * Entity 基类
+ */
+public class BaseDO {
+
+    /**
+     * 主键id
+     */
+    protected Long id;
+
+    /**
+     * 创建时间
+     */
+    protected Date gmtCreate;
+
+    /**
+     * 修改时间
+     */
+    protected Date gmtModified;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
+    }
+}

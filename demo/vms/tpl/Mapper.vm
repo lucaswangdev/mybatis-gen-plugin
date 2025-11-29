@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="${model.repoPkg}.${model.table.className}Mapper">
+
+    <resultMap id="BaseResultMap" type="${model.entityPkg}.${model.table.className}DO">
+#foreach($column in $model.table.columns)
+        <result column="$column.name" property="$column.fieldName" />
+#end
+    </resultMap>
+
+    <sql id="Table_Name">
+        ${model.table.name}
+    </sql>
+
+    <sql id="Base_Column_List">
+#foreach($column in $model.table.columns)##
+#if($foreach.first)     #end
+`${column.name}`##
+#if($foreach.hasNext ), #end##
+#end
+    </sql>
+
+    <sql id="Base_Value_List">
+#foreach($column in $model.table.columns)##
+#if($foreach.first)      #end
+#{${column.fieldName}}##
+#if($foreach.hasNext ), #end##
+#end
+    </sql>
+
+    <sql id="getSingleByIdSql">
+        <where>
+            and `id` = #{id}
+        </where>
+    </sql>
+
+    <sql id="Base_Set_List">
+        <trim suffixOverrides=",">
+            <include refid="update_set_sql" />
+        </trim>
+    </sql>
+
+    <sql id="update_set_sql">
+#foreach($column in $model.table.columns)
+#if(!$column.PK && $column.name != 'gmt_create')
+        <if test="${column.fieldName} != null">
+            `${column.name}` = #{$column.fieldName},
+        </if>
+#end
+#end
+    </sql>
+
+    <sql id="orderBySql">
+        <if test="orderByList != null and orderByList.size > 0">
+            order by
+            <foreach collection="orderByList" item="orderByItem" separator=",">
+                ${orderByItem}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="limitSql">
+        <if test="offSet != null and size != null">
+            limit #{offSet}, #{size}
+        </if>
+        <if test="offSet == null and size != null">
+            limit #{size}
+        </if>
+    </sql>
+
+    <sql id="entityConditionsSql">
+#foreach($column in $model.table.columns)
+        <if test="${column.fieldName} != null#if($column.dataType == 'VARCHAR' || $column.dataType == 'TEXT') and ${column.fieldName} != ''#end">
+            and `${column.name}` = #{$column.fieldName},
+        </if>
+#end
+    </sql>
+
+    <sql id="entityExtConditionsSql">
+#foreach($column in $model.table.columns)
+#if($column.dataType == 'DATETIME' || $column.dataType == 'DATE' || $column.dataType == 'TIMESTAMP')
+        <if test="${column.fieldName}Begin != null">
+            and `${column.name}` >= #{$column.fieldName}Begin},
+        </if>
+        <if test="${column.fieldName}End != null">
+            and `${column.name}` &lt;= #{$column.fieldName}End},
+        </if>
+#end
+#end
+        <if test="idList != null and idList.size > 0">
+            and `id` in
+            <foreach collection="idList" item="idItem" open="(" separator="," close=")">
+                #{idItem}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="queryByQueryParamSql">
+        <where>
+            <include refid="entityConditionsSql" />
+            <include refid="entityExtConditionsSql" />
+        </where>
+    </sql>
+
+    <sql id="queryByEntitySql">
+        <where>
+            <include refid="entityConditionsSql" />
+        </where>
+    </sql>
+
+    <!--新增记录-->
+    <insert id="insert" parameterType="${model.entityPkg}.${model.table.className}DO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="Table_Name"/>
+        (<include refid="Base_Column_List" />)
+        values ( <include refid="Base_Value_List" />)
+    </insert>
+
+    <!--批量新增记录-->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO <include refid="Table_Name"/>
+        (<include refid="Base_Column_List" />)
+        values
+        <foreach collection="list" item="el" open="(" separator="), (" close=")">
+#foreach($column in $model.table.columns)##
+#if($foreach.first)            #end
+#{el.${column.fieldName}}##
+#if($foreach.hasNext ), #end##
+#end
+        </foreach>
+    </insert>
+
+    <!--根据条件更新记录-->
+    <update id="update" parameterType="${model.entityPkg}.${model.table.className}DO">
+        update <include refid="Table_Name" />
+        set <include refid="Base_Set_List" />
+        <include refid="getSingleByIdSql" />
+    </update>
+
+    <!--保存记录，如果存在，则更新记录-->
+    <update id="save" parameterType="${model.entityPkg}.${model.table.className}DO">
+        INSERT INTO <include refid="Table_Name"/>
+        (<include refid="Base_Column_List" />)
+        values ( <include refid="Base_Value_List" />)
+        on duplicate key update <include refid="Base_Set_List" />
+    </update>
+
+    <!--删除记录-->
+    <delete id="deleteById">
+        DELETE from <include refid="Table_Name"/>
+        where `id` = #{id}
+    </delete>
+
+    <!-- 根据主键查询单条记录-->
+    <select id="getSingleById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <include refid="getSingleByIdSql" />
+        limit 1
+    </select>
+
+    <!-- 根据主键查询单条记录-->
+    <select id="getById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <include refid="getSingleByIdSql" />
+        limit 1
+    </select>
+
+    <!-- 根据主键查询单条记录-->
+    <select id="queryListByParam" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <include refid="queryByQueryParamSql" />
+        <include refid="orderBySql" />
+        <include refid="limitSql" />
+    </select>
+
+    <!-- 根据主键查询单条记录-->
+    <select id="queryCountByParam" resultType="java.lang.Long">
+        select count(*)
+        from <include refid="Table_Name"/>
+        <include refid="queryByQueryParamSql" />
+    </select>
+
+    <sql id="queryByQueryParamExtSql">
+        <where>
+            <include refid="entityConditionsSql" />
+            <include refid="entityExtConditionsSql" />
+            <if test="nameLike != null and nameLike != '' ">
+                and name like concat('%', #{nameLike}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <!--根据查询条件查询记录，扩展-->
+    <select id="queryListByParamExt" resultType="${model.entityPkg}.${model.table.className}DO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <include refid="queryByQueryParamExtSql" />
+        <include refid="orderBySql" />
+        <include refid="limitSql" />
+    </select>
+
+    <!--根据查询条件查询数量，扩展-->
+    <select id="queryCountByParamExt" resultType="java.lang.Long">
+        select count(*)
+        from <include refid="Table_Name"/>
+        <include refid="queryByQueryParamExtSql" />
+    </select>
+
+    <!-- DO_NOT_MODIFY_ABOVE -->
+</mapper>

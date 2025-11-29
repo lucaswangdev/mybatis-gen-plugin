@@ -1,0 +1,6 @@
+#foreach($table in $model.db.tables)
+
+    #set($repoModel = {"table" : $table, "basePkg": $model.basePkg, "entityPkg":$model.entityPkg, "paramPkg":$model.paramPkg, "paramExtPkg":$model.paramExtPkg, "repoPkg": $model.repoPkg})
+
+    $processor.generate("${model.tplPath}/RepositoryBase.vm", "${model.targetPath}/${table.className}Mapper.java", false, $repoModel)
+#end

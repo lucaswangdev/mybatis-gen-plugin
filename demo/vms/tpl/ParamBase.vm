@@ -1,0 +1,41 @@
+package $model.package;
+
+import ${model.basePkg}.common.BaseParam;
+import org.apache.ibatis.type.Alias;
+
+import java.io.Serializable;
+import java.util.Date;
+
+@Alias("${model.table.className}Param")
+public class ${model.className} extends BaseParam implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+## ~~ begin column to field
+#foreach($column in $model.table.columns)
+    /**
+     * ${column.remarks}
+     * type ${column.type}
+     */
+    private $column.javaType $column.fieldName;
+#end  ## ~~ end column to field
+
+## ~~ begin getter & setter method
+#foreach($column in $model.table.columns)
+#if($column.fieldName == 'id' || $column.fieldName == 'gmtCreate' || $column.fieldName == 'gmtModified')
+    @Override
+#end
+    public $column.javaType get${column.propertyName}() {
+        return $column.fieldName;
+    }
+
+#if($column.fieldName == 'id' || $column.fieldName == 'gmtCreate' || $column.fieldName == 'gmtModified')
+    @Override
+#end
+    public void set${column.propertyName}($column.javaType $column.fieldName) {
+        this.$column.fieldName = $column.fieldName;
+    }
+
+#end  ## ~~ end getter & setter method
+
+}
