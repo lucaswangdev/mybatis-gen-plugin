@@ -21,6 +21,29 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
+    <developers>
+        <developer>
+            <name>Lucas Wang</name>
+            <email>lucaswang.dev@gmail.com</email>
+            <organization>lucaswangdev</organization>
+            <organizationUrl>http://www.lucaswangdev.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/lucaswangdev/mybatis-gen-plugin.git</connection>
+        <developerConnection>scm:git:ssh://github.com/lucaswangdev/mybatis-gen-plugin.git</developerConnection>
+        <url>https://github.com/lucaswangdev/mybatis-gen-plugin</url>
+    </scm>
+
     <dependencies>
         <!-- Maven Plugin Dependencies -->
         <dependency>
@@ -125,6 +148,103 @@
                     <goalPrefix>mybatis-gen</goalPrefix>
                 </configuration>
             </plugin>
+
+            <!-- 禁用默认的deploy插件，使用central-publishing-maven-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- 发布到GitHub Packages的profile -->
+        <profile>
+            <id>github-release</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub lucaswangdev Apache Maven Packages</name>
+                    <url>https://maven.pkg.github.com/lucaswangdev/mybatis-gen-plugin</url>
+                </repository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <!-- 启用deploy插件用于GitHub Packages -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.2</version>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- 发布到Maven中央仓库的profile -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.5.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <links>
+                                <link>https://docs.oracle.com/javase/8/docs/api/</link>
+                            </links>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
