@@ -150,7 +150,7 @@ public class GenerateSetting {
     }
 
     public String getJavaDelimiter() {
-        return StringUtils.isBlank(javaDelimiter) ? "// 以上部分由插件生成请勿修改" : javaDelimiter;
+        return StringUtils.isBlank(javaDelimiter) ? "/* 以上部分由插件生成请勿修改 */" : javaDelimiter;
     }
 
     public String getXmlDelimiter() {

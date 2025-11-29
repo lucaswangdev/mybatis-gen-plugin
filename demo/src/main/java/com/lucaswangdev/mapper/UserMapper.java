@@ -29,8 +29,7 @@ public interface UserMapper extends BaseMapper<UserParam, UserDO> {
      */
     Long queryCountByParamExt(UserParamExt param);
 
-    /* DO_NOT_MODIFY_ABOVE */
+    /* 以上部分由插件生成请勿修改 */
 
     Long queryCountByParamExt3(UserParamExt param);
-
 }

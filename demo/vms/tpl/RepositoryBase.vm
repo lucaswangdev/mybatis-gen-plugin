@@ -32,5 +32,5 @@ public interface ${model.table.className}Mapper extends BaseMapper<${model.table
      */
     Long queryCountByParamExt(${model.table.className}ParamExt param);
 
-    /* DO_NOT_MODIFY_ABOVE */
+    /* 以上部分由插件生成请勿修改 */
 }

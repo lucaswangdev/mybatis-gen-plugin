@@ -208,5 +208,5 @@
         <include refid="queryByQueryParamExtSql" />
     </select>
 
-    <!-- DO_NOT_MODIFY_ABOVE -->
+    <!-- 以上部分由插件生成请勿修改 -->
 </mapper>

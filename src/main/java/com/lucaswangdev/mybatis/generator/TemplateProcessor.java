@@ -32,7 +32,7 @@ public class TemplateProcessor {
         this.templateEntry = templateEntry;
         this.database = database;
         this.logger = logger;
-        this.javaDelimiter = javaDelimiter != null ? javaDelimiter : "// 以上部分由插件生成请勿修改";
+        this.javaDelimiter = javaDelimiter != null ? javaDelimiter : "/* 以上部分由插件生成请勿修改 */";
         this.xmlDelimiter = xmlDelimiter != null ? xmlDelimiter : "<!-- 以上部分由插件生成请勿修改 -->";
     }
 
@@ -63,6 +63,8 @@ public class TemplateProcessor {
             context.put("model", model);
             context.put("processor", this);
             context.put("setting", this.setting);
+            context.put("javaDelimiter", this.javaDelimiter);
+            context.put("xmlDelimiter", this.xmlDelimiter);
 
             template.merge(context, writer);
             content = writer.toString();

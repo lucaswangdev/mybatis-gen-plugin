@@ -204,7 +204,8 @@
         <include refid="queryByQueryParamExtSql" />
     </select>
 
-    <!-- DO_NOT_MODIFY_ABOVE -->
+    <!-- 以上部分由插件生成请勿修改 -->
+
     <select id="queryCountByParamExt3" resultType="java.lang.Long">
         select count(*)
         from <include refid="Table_Name"/>

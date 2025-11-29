@@ -1,4 +1,4 @@
-# MyBatis Generator Plugin - Maven Version
+# MyBatis Generator Plugin
 
 MyBatis Generator Plugin是一个基于数据库模型和Velocity模板的代码生成工具。本项目已从Gradle项目重构为Maven插件，可以通过Maven命令直接使用。
 
