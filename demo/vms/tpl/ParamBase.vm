@@ -8,8 +8,8 @@ import java.util.Date;
 
 @Alias("${model.table.className}Param")
 public class ${model.className} extends BaseParam implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+#set($serialUID = $processor.generateSerialVersionUID())
+    private static final long serialVersionUID = ${serialUID}L;
 
 ## ~~ begin column to field
 #foreach($column in $model.table.columns)

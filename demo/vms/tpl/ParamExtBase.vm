@@ -5,8 +5,8 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("${model.table.className}ParamExt")
 public class ${model.className} extends ${model.table.className}Param {
-
-    private static final long serialVersionUID = 1L;
+#set($serialUID = $processor.generateSerialVersionUID())
+    private static final long serialVersionUID = ${serialUID}L;
 
     private String extendField;
 

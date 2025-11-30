@@ -38,6 +38,19 @@ public class TemplateProcessor {
 
     public TemplateProcessor(){}
 
+    /**
+     * 生成随机的serialVersionUID
+     * 使用时间戳和随机数组合确保每次生成都是唯一的
+     * @return 生成的serialVersionUID值
+     */
+    public long generateSerialVersionUID() {
+        // 使用时间戳（毫秒）* 1000000 + 随机数（0-999999）
+        // 这样可以确保即使在同一毫秒内多次调用也能生成不同的值
+        long timestamp = System.currentTimeMillis();
+        long random = (long)(Math.random() * 1000000);
+        return timestamp * 1000000L + random;
+    }
+
     private String parseTemplate(String templatePath, Object model) {
         Thread thread = Thread.currentThread();
         ClassLoader loader = thread.getContextClassLoader();

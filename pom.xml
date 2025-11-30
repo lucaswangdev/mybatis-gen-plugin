@@ -7,7 +7,7 @@
 
     <groupId>com.lucaswangdev</groupId>
     <artifactId>mybatis-gen-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>maven-plugin</packaging>
 
     <name>mybatis-gen-plugin</name>

@@ -5,8 +5,7 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("UserParamExt")
 public class UserParamExt extends UserParam {
-
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1764515928966343522L;
 
     private String extendField;
 

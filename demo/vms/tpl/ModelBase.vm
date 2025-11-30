@@ -17,8 +17,8 @@ import java.io.Serializable;
 @Alias("${model.table.className}DO")
 public class ${model.className} extends BaseDO implements Serializable {
 
-
-	private static final long serialVersionUID = 1L;
+#set($serialUID = $processor.generateSerialVersionUID())
+	private static final long serialVersionUID = ${serialUID}L;
 ## ~~ begin column to field
 #foreach($column in $model.table.columns)
     /**

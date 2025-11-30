@@ -17,8 +17,7 @@ import java.io.Serializable;
 @Alias("UserDO")
 public class UserDO extends BaseDO implements Serializable {
 
-
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1764515928931881018L;
     /**
     * 主键
     * type BIGINT
