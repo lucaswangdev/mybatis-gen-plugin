@@ -1,17 +1,71 @@
 # 示例DEMO —— 基于MySQL数据库的MyBatis实体和映射文件生成模板
+
 Demo文件夹中的模板，是经过<b>精心打磨</b>的、可以直接拿来用于生产的模板，它支持以下特性：
 
 1. 一键生成实体类、MyBatis Repository、MyBatis Mapper
 2. 实体类、MyBatis Repository和MyBatis Mapper均利用继承策略，划分出XXXX和XXXXBase两个文件，其中XXXX如果文件存在则不覆盖，XXXXBase每次生成都会覆盖。
 如果在生成后你需要做一些代码上的调整，请在XXXX文件中修改，而不要在XXXXBase中修改。这样做的好处是一旦我们的表结构发生变化需要重新生成时，不会覆盖您手动改过的代码。
 3. 如果表存在is_deleted字段，生成的delete方法是逻辑删除而不是物理删除
-4，如果表存在record_version字段，update语句带有乐观锁，即update .... set record_version=record_version + 1 where .... and record_version=#{record_version}
+4. 如果表存在record_version字段，update语句带有乐观锁，即update .... set record_version=record_version + 1 where .... and record_version=#{record_version}
 5. 如果表存在create_time，insert语句这一列的值是now()
 6. 如果表存在update_time, insert和update语句这一列的值是now()
 
-入口模板：tpl1.jm.vm
+## 快速开始
 
+### 正式使用（推荐）
+
+如果您想在项目中使用该插件，可以直接从Maven中央仓库引入，无需本地安装：
+
+1. **在项目pom.xml中添加插件配置**
+
+> **提示**：请访问 [GitHub Releases](https://github.com/lucaswangdev/mybatis-gen-plugin/releases) 或 [Maven Central](https://central.sonatype.com/artifact/com.lucaswangdev/mybatis-gen-plugin) 查看最新版本号
+
+```xml
+<build>
+  <plugins>
+    <plugin>
+      <groupId>com.lucaswangdev</groupId>
+      <artifactId>mybatis-gen-plugin</artifactId>
+      <version>最新版本号</version> <!-- 例如：1.0.1，请替换为实际的最新版本 -->
+      <configuration>
+        <configFile>generator.properties</configFile>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
 ```
+
+2. **创建配置文件和模板**
+
+在项目根目录创建 `generator.properties` 配置文件和 `vms/` 模板目录（可参考本demo的配置）
+
+3. **运行代码生成**
+
+```bash
+mvn mybatis-gen:generate
+```
+
+### 本地调试开发
+
+如果您需要修改插件源码或进行本地调试，才需要执行以下步骤：
+
+1. **克隆项目并安装到本地仓库**
+
+```bash
+git clone https://github.com/lucaswangdev/mybatis-gen-plugin.git
+cd mybatis-gen-plugin
+mvn clean install
+```
+
+2. **在项目中使用本地版本**
+
+在您的项目pom.xml中引用本地安装的版本即可
+
+## 模板说明
+
+### 入口模板：tpl1.jm.vm
+
+```velocity
 ##tpl1.jm.vm
 
 ## model是Database对象
@@ -38,7 +92,9 @@ $processor.process("${cfg.tplPath}/Mapper.tpl.vm", $cfg)
 
 在tpl1.jm.vm模板里，调用$processor.process分别解析Entity、Repository和Mapper，并向引擎传递了新的model
 
-```
+### Entity.tpl.vm 示例
+
+```velocity
 ## Entity.tpl.vm
 
 ## 此时，model是tpl1.jm.vm中传入的cfg
@@ -52,15 +108,16 @@ $processor.process("${cfg.tplPath}/Mapper.tpl.vm", $cfg)
     $processor.generate("${model.tplPath}/EntityBase.vm", "${model.targetPath}/${table.className}Base.java", true, $entityModel)
     
     ##生成xxxx.java，如果目标文件存在，忽略，不替换
-    $processor.generate("${model.tplPath}/Entity.vm", "${model.targetPath}/${table.className}.java", false, 
-)
+    $processor.generate("${model.tplPath}/Entity.vm", "${model.targetPath}/${table.className}.java", false, $entityModel)
 #end
 ```
-在Entity.tpl.vm里，调用$processor.generate生成EntityBase和Entity，并像引擎传递新的model
+
+在Entity.tpl.vm里，调用$processor.generate生成EntityBase和Entity，并向引擎传递新的model。
 对于EntityBase，每次生成都会替换目标文件；对于Entity，如果目标文件已经存在了，就会忽略这个文件的生成。
 
-下面再看看EntityBase.vm的定义片段
-```
+### EntityBase.vm 定义片段
+
+```velocity
 ## 此时，model是Entity.tpl.vm中传入的entityModel
 package $model.package;
 
@@ -85,3 +142,7 @@ public class ${model.className}Base {
 #end  ## ~~ end column to field
 ...
 ```
+
+## 配置说明
+
+详细的配置说明请参考主项目的README.md文件。

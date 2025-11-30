@@ -32,13 +32,9 @@ mybatis-gen-plugin/
 
 ## Maven插件使用
 
-### 1. 安装插件到本地仓库
+### 方式一：直接使用（推荐）
 
-```bash
-mvn clean install
-```
-
-### 2. 在项目中使用插件
+插件已发布到Maven中央仓库，可以直接在项目中使用，无需手动安装：
 
 在您的项目`pom.xml`中添加插件配置：
 
@@ -65,18 +61,25 @@ mvn clean install
 mvn mybatis-gen:generate
 ```
 
-## 在其他项目中使用
+### 方式二：本地调试开发
 
-要在其他项目中使用mybatis-gen-plugin，请按照以下步骤操作：
+如果您需要修改插件源码或进行本地调试，才需要执行以下步骤：
 
-### 1. 安装插件到本地Maven仓库
+1. **克隆并安装到本地仓库**
 
-首先确保插件已安装到本地Maven仓库：
 ```bash
+git clone https://github.com/lucaswangdev/mybatis-gen-plugin.git
+cd mybatis-gen-plugin
 mvn clean install
 ```
 
-### 2. 在您的项目中添加插件配置
+2. **在项目中使用本地版本**
+
+在您的项目pom.xml中引用本地安装的版本（参考上面的配置）
+
+## 在其他项目中使用
+
+### 1. 在您的项目中添加插件配置
 
 在您的项目`pom.xml`中添加以下配置：
 
@@ -97,7 +100,7 @@ mvn clean install
 </build>
 ```
 
-### 3. 创建配置文件
+### 2. 创建配置文件
 
 在您的项目根目录创建`generator.properties`文件：
 ```properties
@@ -108,26 +111,31 @@ jdbc.username=your_username
 jdbc.password=your_password
 ```
 
-### 4. 创建模板文件
+### 3. 创建模板文件
 
 复制模板文件到您的项目中：
 - 创建`vms/tpl1.jm.vm`作为入口模板
 - 创建`vms/tpl/`目录并添加所有模板文件
 
-### 5. 运行代码生成
+### 4. 运行代码生成
 
 在您的项目目录中运行：
 ```bash
 mvn mybatis-gen:generate
 ```
 
-## 当前状态
+## 插件状态
 
-**注意：** 目前这个插件还没有发布到Maven中央仓库，只能在本地使用。要使用这个插件，您需要：
+✅ **已发布到Maven中央仓库**
 
-1. 克隆或下载这个项目
-2. 在项目根目录运行`mvn clean install`将插件安装到本地Maven仓库
-3. 在您的项目中按照上面的说明配置和使用插件
+本插件已发布到Maven中央仓库，可以直接在项目中使用。查看最新版本：
+- [GitHub Releases](https://github.com/lucaswangdev/mybatis-gen-plugin/releases)
+- [Maven Central](https://central.sonatype.com/artifact/com.lucaswangdev/mybatis-gen-plugin)
+
+**仅在以下情况需要本地安装**：
+- 您需要修改插件源码
+- 您需要调试插件功能
+- 您想使用未发布的开发版本
 
 ## 支持的数据库
 
