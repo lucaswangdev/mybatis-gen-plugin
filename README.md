@@ -42,13 +42,15 @@ mvn clean install
 
 在您的项目`pom.xml`中添加插件配置：
 
+> **注意**：请将 `<version>` 替换为[最新版本号](https://github.com/lucaswangdev/mybatis-gen-plugin/releases)。您可以在项目的 [Releases](https://github.com/lucaswangdev/mybatis-gen-plugin/releases) 页面查看最新版本。
+
 ```xml
 <build>
   <plugins>
     <plugin>
       <groupId>com.lucaswangdev</groupId>
       <artifactId>mybatis-gen-plugin</artifactId>
-      <version>1.0.0</version>
+      <version>最新版本号</version> <!-- 请查看 https://github.com/lucaswangdev/mybatis-gen-plugin/releases -->
       <configuration>
         <configFile>generator.properties</configFile>
       </configuration>
@@ -77,13 +79,16 @@ mvn clean install
 ### 2. 在您的项目中添加插件配置
 
 在您的项目`pom.xml`中添加以下配置：
+
+> **提示**：请访问 [GitHub Releases](https://github.com/lucaswangdev/mybatis-gen-plugin/releases) 查看最新版本号
+
 ```xml
 <build>
   <plugins>
     <plugin>
       <groupId>com.lucaswangdev</groupId>
       <artifactId>mybatis-gen-plugin</artifactId>
-      <version>1.0.0</version>
+      <version>最新版本号</version> <!-- 请替换为实际的最新版本，如 1.0.1 -->
       <configuration>
         <configFile>generator.properties</configFile>
       </configuration>
